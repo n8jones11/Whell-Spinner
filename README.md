@@ -1,66 +1,121 @@
-Agentforce Pitching Selector
-A fun, interactive roulette wheel to randomly select teams for pitching, built with HTML5 Canvas, CSS, and vanilla JavaScript.
+# Agentforce Pitching Selector
 
-📜 Features
-🎡 Dynamic spinning wheel with custom team segments
+Spin the wheel. Select your team. Pitch with power.
 
-🎨 Custom colours, fonts (ITCAvantGardeStd-Demi), and styling
+---
 
-🎉 Confetti celebration on team selection
+## Table of Contents
 
-📝 Selection history list tracking order of picks
+- [Overview](#overview)
+- [Features](#features)
+- [Getting Started](#getting-started)
+- [Folder Structure](#folder-structure)
+- [Customisation](#customisation)
+- [Responsive Design](#responsive-design)
+- [Preview](#preview)
+- [License](#license)
+- [Acknowledgements](#acknowledgements)
 
-📱 Fully responsive for desktop, tablet, and mobile screens
+---
 
-🔊 Click sound effect during spinning
+## Overview
 
-🛠 Easy to customise gaps, colours, speeds, and teams
+**Agentforce Pitching Selector** is an interactive roulette wheel built with HTML5, CSS, and vanilla JavaScript.  
+Designed for fun and fair team selection with a polished Salesforce-branded look.
 
-📂 Project Structure
-plaintext
-Copy
-Edit
+---
+
+## Features
+
+- Animated spinning wheel
+- Click sound effects on spin
+- Confetti explosion on team selection
+- Team selection history
+- Brand-themed colours and custom font
+- Mobile-responsive design
+
+---
+
+## Getting Started
+
+### Prerequisites
+No installations required — just a modern web browser.
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/agentforce-pitch-selector.git
+   ```
+
+2. Place the following files in the root folder:
+   - `index.html`
+   - `ITCAvantGardeStd-Demi.otf`
+   - `confetti.gif`
+   - `click.m4a`
+   - `banner.png` (optional)
+
+3. Open `index.html` in your browser.
+
+---
+
+## Folder Structure
+
+```plaintext
 / (root)
- ├── index.html        # Main HTML file (wheel, logic, and layout)
- ├── ITCAvantGardeStd-Demi.otf # Font file used for title
- ├── confetti.gif      # Confetti animation shown on team selection
- ├── click.m4a         # Click sound played during spinning
- └── README.md         # Project documentation
-🚀 Getting Started
-Clone or download the repository.
+ ├── index.html
+ ├── ITCAvantGardeStd-Demi.otf
+ ├── confetti.gif
+ ├── click.m4a
+ ├── banner.png
+ └── README.md
+```
 
-Make sure the following files are placed in the same folder:
+---
 
-index.html
+## Customisation
 
-ITCAvantGardeStd-Demi.otf
+| Element                | Where to Change                           |
+|-------------------------|-------------------------------------------|
+| Team names and colours  | `allTeams` array inside JavaScript        |
+| Background image        | `body { background-image: url(...) }`     |
+| Font for title          | Linked via `@font-face` in CSS            |
+| Wheel size              | `<canvas width="600" height="600">` tag   |
+| Spin speed and easing   | `initialVelocity` and `duration` values   |
+| Gaps between sections   | Controlled via CSS `gap` property         |
 
-confetti.gif
+---
 
-click.m4a
+## Responsive Design
 
-Open index.html in any modern web browser.
+- Canvas and elements resize below 768px screen width
+- Logo scales down
+- Wheel remains accessible and usable on mobile
 
-No additional setup required.
+No extra setup needed.
 
-🎨 Customisation
-You can easily tweak the following:
+---
 
-Spacing between elements: Adjust the gap in the CSS under the body selector.
+## Preview
 
-Number of teams: Buttons allow selection of 3, 4, or 5 teams.
+![Preview Screenshot](preview.png)
 
-Wheel size: Change the <canvas> width and height.
+---
 
-Spin speed: Modify the initialVelocity or spin duration in the JavaScript.
+## License
 
-Background or branding: Replace the background image URL or logo.
+This project is licensed under the [MIT License](LICENSE).
 
-📱 Mobile Optimisation
-Responsive layouts are handled with CSS media queries. On screens smaller than 768px:
+You are free to use, copy, modify, and distribute.
 
-Canvas scales to 90% width
+---
 
-Result box adapts to screen size
+## Acknowledgements
 
-Logo size reduces for better fit
+- Salesforce AI Centre branding inspiration
+- Mascots featured: Codey, Astro, Appy, Brandy, Cloudy
+- Confetti assets and open sounds used under free use licenses
+
+---
+
+# ✨ Happy Spinning!
