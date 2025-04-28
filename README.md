@@ -53,7 +53,7 @@ No installations required — just a modern web browser.
    - `ITCAvantGardeStd-Demi.otf`
    - `confetti.gif`
    - `click.m4a`
-   - `banner.png` (optional)
+   - 'Salesforce_fav.png'
 
 3. Open `index.html` in your browser.
 
@@ -67,7 +67,7 @@ No installations required — just a modern web browser.
  ├── ITCAvantGardeStd-Demi.otf
  ├── confetti.gif
  ├── click.m4a
- ├── banner.png
+ ├── Salesforce_fav.png
  └── README.md
 ```
 
