@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Agentforce Pitching Selector</title>
+  <style>
+    @font-face {
+      font-family: 'ITCAvantGardeStd-Demi';
+      src: url('ITCAvantGardeStd-Demi.otf') format('opentype');
+      font-weight: normal;
+      font-style: normal;
+    }
+    body {
+      /* CONTROL: Overall vertical spacing between sections */
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2%; /* ADJUST HERE: Reduce vertical gap between logo, title, wheel, and buttons */
+      height: 100vh;
+      text-align: center;
+      background-image: url('https://i.ibb.co/m5d7VVRS/Background-Agent-Aurora-3.jpg');
+      background-size: 100% 100%;
+      background-position: center;
+      margin: 0;
+      padding: 20px;
+      color: white;
+    }
+    canvas {
+      border: 10px solid rgba(255, 255, 255, 0.5);
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      box-shadow: 6px 6px 12px rgba(183, 183, 183, 0.65);
+      position: relative;
+      z-index: 1;
+    }
+    button {
+      padding: 10px 40px;
+      font-size: 16px;
+      margin: 2% 10px 10px;
+      cursor: pointer;
+      border-radius: 50px;
+      background-color: transparent;
+      border: 2px solid #1f0974;
+      color: #1f0974;
+    }
+    #resultBox {
+      width:400px;
+      text-align: center;
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(255, 255, 255, 0.85);
+      padding: 30px;
+      border-radius: 12px;
+      color: #1f0974;
+      z-index: 10;
+    }
+    #resultBox img {
+      display: block;
+      margin: 20px auto 0 auto;
+      margin-top: 20px;
+      width: 150px;
+    }
+    #confetti {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: 5;
+      pointer-events: none;
+    }
+    h1 {
+      font-family: 'ITCAvantGardeStd-Demi', sans-serif;
+      color: #1f0974;
+    }
+      @media (max-width: 768px) {
+      body {
+        padding: 10px;
+      }
+      canvas {
+        width: 90% !important;
+        height: auto !important;
+      }
+      #resultBox {
+        width: 90%;
+      }
+      img[src*="Email-Header-Pills"] {
+        width: 80%;
+      }
+    }
+</style>
+</head>
+<body>
+
+  <img src="https://i.ibb.co/4ww67kdK/Email-Header-Pills.png" width="500" alt="Salesforce AI Centre Logo">
+  <br> <!-- You can remove or adjust this line break if needed -->
+  <h1>Agentforce Pitching Selector</h1>
+
+  <div id="teamSelection" style="display: flex; flex-direction: column; align-items: center;">
+    <p style="margin-bottom: 10px; font-size: 18px; color: #1f0974;">How many teams are playing today?</p>
+    <div id="teamButtons" style="display: flex; gap: 10px; justify-content: center;">
+      <button onclick="setTeamCount(3)">3 Teams</button>
+      <button onclick="setTeamCount(4)">4 Teams</button>
+      <button onclick="setTeamCount(5)">5 Teams</button>
+    </div>
+  </div>
+
+  <div id="selector"></div>
+  <canvas id="wheel" width="600" height="600" style="display: none; margin-top: 20px;"> <!-- ADJUST HERE: Space above the wheel --></canvas><br>
+  <button id="spinBtn" style="display: none; margin-top: 10px;">Spin!</button> <!-- ADJUST HERE: Space above the spin button -->
+
+  <img id="confetti" src="confetti.gif" alt="Confetti">
+  <div id="resultBox">
+    <div id="resultText"></div>
+    <img id="teamImage" src="" alt="Team Image">
+    <button id="stopConfettiBtn" style="display: none; margin: 20px auto 0 auto;" onclick="stopConfetti()">Stop Confetti</button>
+  </div>
+
+  <audio id="tick" src="click.m4a" preload="auto"></audio>
+
+  <script>
+    const canvas = document.getElementById("wheel");
+    const ctx = canvas.getContext("2d");
+    const spinBtn = document.getElementById("spinBtn");
+    const resultBox = document.getElementById("resultBox");
+    const resultText = document.getElementById("resultText");
+    const teamImage = document.getElementById("teamImage");
+    const confetti = document.getElementById("confetti");
+    const tickSound = document.getElementById("tick");
+
+    let segments = [];
+    const radius = canvas.width / 2;
+    let angle = 0;
+    let spinning = false;
+    let lastSelectedLabel = null;
+    let lastTick = 0;
+
+    function setTeamCount(teamCount) {
+      document.getElementById("teamSelection").style.display = "none";
+      document.getElementById("spinBtn").style.display = "inline-block";
+      document.getElementById("wheel").style.display = "block";
+
+      const allTeams = [
+        { label: "Codey", color: "#1f0974", image: "https://i.ibb.co/PzNKG42z/codey.png" },
+        { label: "Astro", color: "#1ab9ff", image: "https://i.ibb.co/20myKwP9/astro.png" },
+        { label: "Appy", color: "#cb65ff", image: "https://i.ibb.co/wVn5rM7/appy.png" },
+        { label: "Brandy", color: "#0250d9", image: "https://i.ibb.co/dscfWdy6/Brandy.png" },
+        { label: "Cloudy", color: "#78b0fd", image: "https://i.ibb.co/VY229bkK/cloudy.png" }
+      ];
+
+      segments = [...allTeams.slice(0, teamCount)];
+      lastSelectedLabel = null;
+      angle = 0;
+      drawWheel();
+    }
+
+    function drawWheel() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const anglePerSegment = (2 * Math.PI) / segments.length;
+
+      for (let i = 0; i < segments.length; i++) {
+        const start = angle + i * anglePerSegment;
+        const end = start + anglePerSegment;
+
+        ctx.beginPath();
+        ctx.moveTo(radius, radius);
+        ctx.arc(radius, radius, radius, start, end);
+        ctx.fillStyle = segments[i].color;
+        ctx.fill();
+        ctx.save();
+        ctx.translate(radius, radius);
+        ctx.rotate(start + anglePerSegment / 2);
+        ctx.textAlign = "right";
+        ctx.fillStyle = "#fff";
+        ctx.font = "24px sans-serif";
+        ctx.fillText(segments[i].label, radius - 60, 10);
+        ctx.restore();
+      }
+    }
+
+    function playTick(currentAngle) {
+      const tickSpacing = (2 * Math.PI) / segments.length;
+      if (currentAngle - lastTick > tickSpacing) {
+        tickSound.currentTime = 0;
+        tickSound.play();
+        lastTick = currentAngle;
+      }
+    }
+
+    function spinWheel() {
+      if (spinning || segments.length === 0) return;
+
+      if (lastSelectedLabel && segments.length > 1) {
+        segments = segments.filter(s => s.label !== lastSelectedLabel);
+        lastSelectedLabel = null;
+      }
+
+      spinning = true;
+      resultBox.style.display = "none";
+      confetti.style.display = "none";
+      document.getElementById("stopConfettiBtn").style.display = "none";
+      confetti.src = "";
+      confetti.src = "confetti.gif";
+
+      let duration = 9000;
+      let start = null;
+      const initialVelocity = Math.random() * 0.6 + 0.4;
+
+      function animate(timestamp) {
+        if (!start) start = timestamp;
+        let elapsed = timestamp - start;
+        let t = Math.min(elapsed / duration, 1);
+
+        let easeOut = 1 - Math.pow(1 - t, 3);
+        let velocity = initialVelocity * (1 - easeOut);
+        angle += velocity * 30;
+        angle %= (2 * Math.PI);
+
+        drawWheel();
+        playTick(angle);
+
+        if (t < 1) {
+          requestAnimationFrame(animate);
+        } else {
+          spinning = false;
+          showResult();
+        }
+      }
+
+      requestAnimationFrame(animate);
+    }
+
+    function showResult() {
+      const anglePerSegment = (2 * Math.PI) / segments.length;
+      const correctedAngle = (2 * Math.PI - (angle % (2 * Math.PI))) % (2 * Math.PI);
+      const index = Math.floor(correctedAngle / anglePerSegment);
+      const winner = segments[index];
+      lastSelectedLabel = winner.label;
+      const historyList = document.getElementById('historyList');
+      const listItem = document.createElement('li');
+      listItem.textContent = winner.label;
+      historyList.appendChild(listItem);
+
+      resultText.innerHTML = `Team <strong>${winner.label}</strong> — You're up next!`;
+      teamImage.src = winner.image;
+      resultBox.style.display = "block";
+      confetti.style.display = "block";
+      document.getElementById("stopConfettiBtn").style.display = "inline-block";
+
+      if (segments.length === 0) {
+        spinBtn.disabled = true;
+        resultText.innerHTML += "<br>All teams have had their turn!";
+      }
+
+      setTimeout(drawWheel, 1000);
+    }
+
+    spinBtn.addEventListener("click", spinWheel);
+
+    function stopConfetti() {
+      confetti.style.display = "none";
+    }
+  </script>
+  <div id="selectionHistory" style="position: fixed; right: 20px; top: 100px; background: rgba(255,255,255,0.8); padding: 10px; border-radius: 8px; color: #1f0974; max-height: 80vh; overflow-y: auto;">
+    <h3>Selection History</h3>
+    <ul id="historyList" style="padding-left: 20px; text-align: left;"></ul>
+  </div>
+
+</body>
+</html>
