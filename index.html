@@ -121,10 +121,9 @@
   <div id="resultBox">
     <div id="resultText"></div>
     <img id="teamImage" src="" alt="Team Image">
-    <button id="stopConfettiBtn" style="display: none; margin: 20px auto 0 auto;" onclick="stopConfetti()">Stop Confetti</button>
   </div>
 
-  <audio id="tick" src="click.m4a" preload="auto"></audio>
+  <audio id="tick" src="click3.m4a" preload="auto"></audio>
 
   <script>
     const canvas = document.getElementById("wheel");
@@ -206,11 +205,10 @@
       spinning = true;
       resultBox.style.display = "none";
       confetti.style.display = "none";
-      document.getElementById("stopConfettiBtn").style.display = "none";
       confetti.src = "";
       confetti.src = "confetti.gif";
 
-      let duration = 9000;
+      let duration = 4000;
       let start = null;
       const initialVelocity = Math.random() * 0.6 + 0.4;
 
@@ -221,7 +219,7 @@
 
         let easeOut = 1 - Math.pow(1 - t, 3);
         let velocity = initialVelocity * (1 - easeOut);
-        angle += velocity * 30;
+        angle += velocity * 15;
         angle %= (2 * Math.PI);
 
         drawWheel();
@@ -265,17 +263,14 @@
 
     spinBtn.addEventListener("click", spinWheel);
 
-    function stopConfetti() {
-      confetti.style.display = "none";
-    }
   </script>
   <div id="selectionHistory" style="position: fixed; top: 10%; right: 5%;  background: rgba(255,255,255,0.8); padding: 10px; border-radius: 8px; color: #1f0974; max-height: 80vh; overflow-y: auto;">
     <h3>Selection History</h3>
     <ul id="historyList" style="padding-left: 20px; text-align: left;"></ul>
   </div>
 
-  <div style="position: fixed; bottom: 10%; right: 5%; font-size: 10pt; color: #1f0974; opacity: 0.7;">
-    Built by AI
+  <div style="position: fixed; bottom: 10%; right: 5%; font-size: 12pt; color: #1f0974; opacity: 0.7;">
+    Built using AI
   </div>
 </body>
 </html>
