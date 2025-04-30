@@ -46,7 +46,7 @@
       color: #1f0974;
     }
     #resultText {
-  font-size: 25px;
+  font-size: 20px;
 }
 
 #resultBox {
@@ -123,6 +123,7 @@
   </div>
 
   <div id="wheelContainer" style="position: relative; display: none;">
+  <button id="spinBtn" style="position: absolute; top: 50%; left: -30%; transform: translateY(-50%); display: none;">Spin!</button>
     <div id="selector3pm" style="
       position: absolute;
       top: 50%;
@@ -135,18 +136,17 @@
       border-left: 30px solid #1f0974;
       z-index: 2;
     "></div>
-    <canvas id="wheel" width="600" height="600" style="margin-top: 10px;"></canvas><br>
+    <canvas id="wheel" width="500" height="500" style="margin-top: 10px;"></canvas><br>
   </div>
 
-  <button id="spinBtn" style="display: none; margin-top: 20px;">Spin!</button>
-
+  
   <img id="confetti" src="confetti.gif" alt="Confetti">
   <div id="resultBox">
     <div id="resultText"></div>
     <img id="teamImage" src="" alt="Team Image">
   </div>
 
-  <audio id="tick" src="click.m4a" preload="auto"></audio>
+  <audio id="tick" src="click3.m4a" preload="auto"></audio>
 
   <script>
     const canvas = document.getElementById("wheel");
@@ -299,7 +299,7 @@
     spinBtn.addEventListener("click", spinWheel);
   </script>
 
-  <div style="position: fixed; bottom: 10%; right: 5%; font-size: 8pt; color: #ffffff; opacity: 0.7;">
+  <div style="position: fixed; bottom: 10%; right: 5%; font-size: 12pt; color: #ffffff; opacity: 0.7;">
     Built by AI
   </div>
 </body>
